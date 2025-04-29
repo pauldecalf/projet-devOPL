@@ -12,10 +12,10 @@ COPY . .
 # Exposition du port
 EXPOSE 3000
 
-# Configuration des variables d'environnement
-ENV PORT=3000
+# Variables d'environnement
 ENV NODE_ENV=development
-ENV HOSTNAME="0.0.0.0"
+ENV HOST=0.0.0.0
+ENV PORT=3000
 
 # Commande de démarrage
-CMD ["npm", "run", "dev"] 
+CMD ["npm", "run", "dev"]

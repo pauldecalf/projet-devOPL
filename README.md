@@ -46,6 +46,14 @@ For deletes on files, functions, or anything else that has been removed to the t
 Delete : ............ .... .......
 ```
 
+## Do the tests
+
+To run the tests, run the command
+
+```bash
+npm run test
+```
+
 ## Grafana
 
 Id : admin

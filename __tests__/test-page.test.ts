@@ -1,5 +1,5 @@
 // __tests__/test-page.test.ts
-import { addNumbers, isPalindrome, countObjects, capitalizeWords } from "../app/test-page/page";
+import { addNumbers, isPalindrome, countObjects, capitalizeWords } from "../components/functions";
 import { describe, expect, it } from "vitest";
 
 describe("Fonctions de TestPage", () => {

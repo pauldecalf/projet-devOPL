@@ -1,8 +1,10 @@
+![Coverage](https://img.shields.io/badge/coverage-91%25-brightgreen)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
-First, run the packages command:
+Firstly, run the install packages command:
 
 ```bash
 npm install
@@ -20,6 +22,12 @@ yarn dev
 pnpm dev
 # or
 bun dev
+```
+
+Finally, run the tests:
+
+```bash
+npm run test
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -44,14 +52,6 @@ For deletes on files, functions, or anything else that has been removed to the t
 
 ```
 Delete : ............ .... .......
-```
-
-## Do the tests
-
-To run the tests, run the command
-
-```bash
-npm run test
 ```
 
 ## Grafana

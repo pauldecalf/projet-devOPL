@@ -1,0 +1,38 @@
+# .github/workflows/run-tests.yml
+name: Run Vitest Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Vitest with coverage
+        run: npm run test:ci
+
+      - name: Check test coverage minimum (90%)
+        run: |
+          COVERAGE=$(grep -Po '(?<=All files[^|]*\\|\\s*)\\d+(?=\\s*\\|)' coverage/coverage-summary.json | head -n1)
+          echo "Test Coverage: $COVERAGE%"
+          if [ "$COVERAGE" -lt 90 ]; then
+            echo "Coverage ($COVERAGE%) is below 90%. Failing the job."
+            exit 1
+          fi

@@ -45,3 +45,8 @@ For deletes on files, functions, or anything else that has been removed to the t
 ```
 Delete : ............ .... .......
 ```
+
+## Grafana
+
+Id : admin
+Password : admin

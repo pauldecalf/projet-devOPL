@@ -39,19 +39,19 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 For new files, functions, or anything else that is new to the project :
 
 ```
-Add : ............ .... .......
+Add : ........... .... .......
 ```
 
 For updates on files, functions or anything else that changed in the project :
 
 ```
-Update : ............ .... .......
+Update : ........... .... .......
 ```
 
 For deletes on files, functions, or anything else that has been removed to the the project :
 
 ```
-Delete : ............ .... .......
+Delete : ........... .... .......
 ```
 
 ## Grafana

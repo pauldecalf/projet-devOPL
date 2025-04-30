@@ -1,11 +1,13 @@
-name: SonarQube Analysis
+name: SonarQube Scan
 
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  sonar:
+  sonarqube:
     runs-on: ubuntu-latest
 
     services:
@@ -14,21 +16,23 @@ jobs:
         ports:
           - 9000:9000
         options: >-
-          --health-cmd="curl -f http://localhost:9000/api/system/health || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=20
+          --name sonarqube
+          --health-cmd "curl -f http://localhost:9000/api/system/health || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 60
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Wait for SonarQube to be ready
         run: |
-          echo "Waiting for SonarQube..."
+          echo "⏳ Waiting for SonarQube to be GREEN..."
           until curl -s http://localhost:9000/api/system/health | grep -q '"status":"GREEN"'; do
             sleep 5
           done
+          echo "✅ SonarQube is ready"
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -36,19 +40,19 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
-      - name: Install sonar-scanner
+      - name: Download SonarQube Scanner
         run: |
-          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
-          unzip -q sonar-scanner.zip
-          echo "${PWD}/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH
+          mkdir -p sonar
+          cd sonar
+          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+          unzip sonar-scanner-cli-4.8.0.2856-linux.zip
+          echo "$PWD/sonar-scanner-4.8.0.2856-linux/bin" >> $GITHUB_PATH
 
-      - name: Run sonar-scanner
+      - name: Run SonarQube scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: http://localhost:9000
         run: |
           sonar-scanner \
-            -Dsonar.projectKey=mon_projet \
-            -Dsonar.sources=. \
-            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.projectKey=your_project_key \
+            -Dsonar.host.url=http://localhost:9000 \
             -Dsonar.login=$SONAR_TOKEN

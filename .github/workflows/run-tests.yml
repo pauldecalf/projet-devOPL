@@ -30,7 +30,7 @@ jobs:
 
       - name: Check test coverage minimum (90%)
         run: |
-          COVERAGE=$(jq '.total.statements.pct' coverage/coverage-summary.json)
+          COVERAGE=$(node -p "require('./coverage/coverage-final.json').total.statements.pct")
           echo "Test Coverage: $COVERAGE%"
           if (( $(echo "$COVERAGE < 90" | bc -l) )); then
             echo "Coverage ($COVERAGE%) is below 90%. Failing the job."

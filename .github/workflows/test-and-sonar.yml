@@ -52,6 +52,7 @@ jobs:
               process.exit(1);
             }
           '
+          gh pr comment ${{ github.event.pull_request.number }} --body "✅ **Coverage:** ${COVERAGE}%"
 
       - name: Fix paths in lcov.info for SonarCloud
         run: |

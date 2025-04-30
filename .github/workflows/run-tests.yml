@@ -30,9 +30,9 @@ jobs:
 
       - name: Check test coverage minimum (90%)
         run: |
-          COVERAGE=$(grep -Po '(?<=All files[^|]*\\|\\s*)\\d+(?=\\s*\\|)' coverage/coverage-summary.json | head -n1)
+          COVERAGE=$(jq '.total.statements.pct' coverage/coverage-summary.json)
           echo "Test Coverage: $COVERAGE%"
-          if [ "$COVERAGE" -lt 90 ]; then
+          if (( $(echo "$COVERAGE < 90" | bc -l) )); then
             echo "Coverage ($COVERAGE%) is below 90%. Failing the job."
             exit 1
           fi

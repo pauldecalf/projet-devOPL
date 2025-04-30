@@ -1,6 +1,52 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect } from "react";
+
+function logMessages() {
+  console.log('Info log: Page chargée avec succès');
+  console.warn('Warning log: Performances potentiellement affectées');
+  console.error('Error log: Problème lors du chargement de certains composants');
+}
 
 export default function Home() {
+  // Utiliser useEffect pour les logs côté client
+  useEffect(() => {
+    // Logs au chargement initial
+    logMessages();
+    
+    // Logs périodiques plus fréquents
+    const interval = setInterval(() => {
+      const timestamp = new Date().toISOString();
+      const random = Math.random();
+      
+      console.log(`=========== LOGS NEXTJS ${timestamp} ===========`);
+      
+      if (random < 0.6) {
+        console.log(`NEXTJS INFO: Action utilisateur simulée à ${timestamp}`);
+      } else if (random < 0.9) {
+        console.warn(`NEXTJS WARNING: Latence réseau détectée à ${timestamp}`);
+      } else {
+        console.error(`NEXTJS ERROR: Erreur de connexion à ${timestamp}`);
+      }
+      
+      // Ajouter quelques logs supplémentaires pour les tests
+      console.log(`NEXTJS INFO: Chargement de la page principale`);
+      console.log(`NEXTJS INFO: Utilisateur actif sur la page`);
+      
+      if (Math.random() > 0.7) {
+        console.warn(`NEXTJS WARNING: Performance dégradée à ${timestamp}`);
+      }
+      
+      if (Math.random() > 0.9) {
+        console.error(`NEXTJS ERROR: Échec de la requête API à ${timestamp}`);
+      }
+    }, 1000); // Logs chaque seconde
+    
+    // Cleanup
+    return () => clearInterval(interval);
+  }, []);
+  
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -87,10 +133,11 @@ export default function Home() {
           href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => console.error("NEXTJS ERROR: Impossible de charger la page correctement")}
         >
           <Image
             aria-hidden
-            src="/globe.svg"
+            src="/window.svg"
             alt="Globe icon"
             width={16}
             height={16}

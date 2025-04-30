@@ -60,12 +60,8 @@ Id : admin
 
 Password : admin
 
-
 ## SonarQube
 
 Id : admin
 
 password : Tg8#plmWz9eD
-
-
-

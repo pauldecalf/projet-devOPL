@@ -30,10 +30,16 @@ jobs:
 
       - name: Check test coverage minimum (90%)
         run: |
-          COVERAGE=$(node -e '
-            const data = require("./coverage/coverage-final.json");
-            const files = Object.values(data);
+          node -e '
+            const fs = require("fs");
+            const data = JSON.parse(fs.readFileSync("coverage/coverage-final.json", "utf8"));
+            const files = Object.values(data).filter(f => f.statements && typeof f.statements.pct === "number");
             const avg = files.reduce((sum, f) => sum + f.statements.pct, 0) / files.length;
             console.log(`Test Coverage: ${avg.toFixed(2)}%`);
-            if (avg < 90) process.exit(1);
-          ')
+            if (avg < 90) {
+              console.error(`❌ Coverage ${avg.toFixed(2)}% is below 90%`);
+              process.exit(1);
+            } else {
+              console.log("✅ Coverage is sufficient.");
+            }
+          '

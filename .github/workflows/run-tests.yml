@@ -30,9 +30,10 @@ jobs:
 
       - name: Check test coverage minimum (90%)
         run: |
-          COVERAGE=$(node -p "require('./coverage/coverage-final.json').total.statements.pct")
-          echo "Test Coverage: $COVERAGE%"
-          if (( $(echo "$COVERAGE < 90" | bc -l) )); then
-            echo "Coverage ($COVERAGE%) is below 90%. Failing the job."
-            exit 1
-          fi
+          COVERAGE=$(node -e '
+            const data = require("./coverage/coverage-final.json");
+            const files = Object.values(data);
+            const avg = files.reduce((sum, f) => sum + f.statements.pct, 0) / files.length;
+            console.log(`Test Coverage: ${avg.toFixed(2)}%`);
+            if (avg < 90) process.exit(1);
+          ')

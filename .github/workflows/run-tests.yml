@@ -32,14 +32,21 @@ jobs:
         run: |
           node -e '
             const fs = require("fs");
-            const data = JSON.parse(fs.readFileSync("coverage/coverage-final.json", "utf8"));
-            const files = Object.values(data).filter(f => f.statements && typeof f.statements.pct === "number");
-            const avg = files.reduce((sum, f) => sum + f.statements.pct, 0) / files.length;
-            console.log(`Test Coverage: ${avg.toFixed(2)}%`);
-            if (avg < 90) {
-              console.error(`❌ Coverage ${avg.toFixed(2)}% is below 90%`);
+            const path = "./coverage/coverage-final.json";
+            if (!fs.existsSync(path)) {
+              console.error("❌ coverage-final.json not found.");
               process.exit(1);
-            } else {
-              console.log("✅ Coverage is sufficient.");
+            }
+            const data = JSON.parse(fs.readFileSync(path, "utf8"));
+            const files = Object.values(data).filter(f => f?.statements?.pct != null);
+            if (!files.length) {
+              console.error("❌ No coverage data found in coverage-final.json");
+              process.exit(1);
+            }
+            const avg = files.reduce((sum, f) => sum + f.statements.pct, 0) / files.length;
+            console.log(`✅ Test Coverage: ${avg.toFixed(2)}%`);
+            if (avg < 90) {
+              console.error(`❌ Coverage (${avg.toFixed(2)}%) is below 90%`);
+              process.exit(1);
             }
           '

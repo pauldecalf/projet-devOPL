@@ -146,8 +146,7 @@ Ce projet utilise du Next.js, il comporte plusieurs dossiers :
 - `/loki`: contient la configuration pour l'intégration de Loki, permettant la collecte et la gestion des logs. Les logs collectés sont envoyés à Grafana pour une visualisation centralisée.
 - `/prometheus`: contient la configuration pour Prometheus, qui est utilisé afin de collecter les métriques de performance de l'application. Ces métriques seront visible via Grafana.
 - `/promtail` : contient la configuration de Promtail, un agent de collecte de logs qui envoie les logs à Loki pour leur traitement et leur visualisation.
-- `/styles` : styles globaux et utilitaires
-- `/tests` : tests unitaires
+- `/tests` : tests unitaires des fonctionnalités de la page, incluant l'addition de nombres, la vérification de palindromes, le comptage d'objets, et la capitalisation de mots, en simulant des clics et en vérifiant les résultats affichés.
 - `/public` : ressources publiques (images, fichiers statiques)
 - `docker-compose.yaml`: fichier de configuration pour Docker Compose, permettant de déployer et gérer l'orchestration des conteneurs (par exemple, Prometheus, Grafana, Loki).
 - `Dockerfile` : image Docker pour le déploiement

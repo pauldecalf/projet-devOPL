@@ -60,7 +60,6 @@ Id : admin
 
 Password : admin
 
-
 ## SonarQube
 
 Id : admin

@@ -1,15 +1,13 @@
-name: Run Vitest Tests
+name: Test and Analyze with SonarCloud
 
 on:
-  push:
-    branches:
-      - dev
   pull_request:
-    branches:
-      - dev
+    branches: [main]
+    types: [opened, synchronize, reopened]
 
 jobs:
-  run-tests:
+  test-and-sonar:
+    name: Run Tests and SonarCloud Analysis
     runs-on: ubuntu-latest
 
     steps:
@@ -22,9 +20,9 @@ jobs:
           node-version: "20"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Run Vitest with coverage
+      - name: Run tests with coverage (Vitest)
         run: npm run test:ci
 
       - name: Check test coverage minimum (90%)
@@ -52,3 +50,12 @@ jobs:
               process.exit(1);
             }
           '
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          args: >
+            -Dsonar.organization=ton-org-sonarcloud
+            -Dsonar.projectKey=ton-nom-projet
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

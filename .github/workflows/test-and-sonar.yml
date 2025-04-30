@@ -1,0 +1,64 @@
+name: Test and Analyze with SonarCloud
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test-and-sonar:
+    name: Run Tests and SonarCloud Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project (if needed)
+        run: npm run build --if-present
+
+      - name: Run tests with coverage (Vitest)
+        run: npm run test:ci
+
+      - name: Check test coverage minimum (90%)
+        run: |
+          node -e '
+            const fs = require("fs");
+            const path = "coverage/coverage-final.json";
+            if (!fs.existsSync(path)) {
+              console.error("❌ coverage-final.json not found.");
+              process.exit(1);
+            }
+            const data = JSON.parse(fs.readFileSync(path, "utf8"));
+            const files = Object.values(data).filter(f => f && typeof f === "object" && f.s);
+            const totalStatements = files.reduce((acc, file) => {
+              const statements = file.s || {};
+              const covered = Object.values(statements).filter(Boolean).length;
+              const total = Object.values(statements).length;
+              return { covered: acc.covered + covered, total: acc.total + total };
+            }, { covered: 0, total: 0 });
+
+            const pct = (100 * totalStatements.covered / totalStatements.total).toFixed(2);
+            console.log(`✅ Test Coverage: ${pct}%`);
+            if (pct < 90) {
+              console.error(`❌ Coverage (${pct}%) is below 90%`);
+              process.exit(1);
+            }
+          '
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          args: >
+            -Dsonar.organization=ton-org-sonarcloud
+            -Dsonar.projectKey=ton-nom-projet
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

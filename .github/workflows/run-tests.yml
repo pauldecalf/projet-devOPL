@@ -1,4 +1,3 @@
-# .github/workflows/run-tests.yml
 name: Run Vitest Tests
 
 on:
@@ -26,25 +25,37 @@ jobs:
         run: npm install
 
       - name: Run Vitest with coverage
-        run: npm run test:ci
+        run: npm run test:ci -- --reporter=json
+
+      - name: List coverage folder (debug)
+        run: ls -R coverage
 
       - name: Check test coverage minimum (90%)
         run: |
-          if [ ! -f coverage/coverage-summary.json ]; then
-            echo "❌ coverage-summary.json not found."
+          FILE=""
+          if [ -f coverage/coverage-summary.json ]; then
+            FILE="coverage/coverage-summary.json"
+          elif [ -f coverage/coverage.json ]; then
+            FILE="coverage/coverage.json"
+          elif [ -f coverage/coverage-final.json ]; then
+            FILE="coverage/coverage-final.json"
+          else
+            echo "❌ No coverage summary file found in coverage/"
             exit 1
           fi
-          COVERAGE=$(node -e '
-            const fs = require("fs");
-            const data = JSON.parse(fs.readFileSync("coverage/coverage-summary.json", "utf8"));
-            const statements = data.total?.statements?.pct;
-            if (statements == null) {
-              console.error("❌ No statements coverage found.");
+
+          COVERAGE=$(node -e "
+            const fs = require('fs');
+            const data = JSON.parse(fs.readFileSync('$FILE', 'utf8'));
+            const files = Object.values(data).filter(f => f?.statements?.pct != null);
+            if (!files.length) {
+              console.error('❌ No valid coverage data found in $FILE');
               process.exit(1);
             }
-            console.log(`✅ Test Coverage: ${statements}%`);
-            if (statements < 90) {
-              console.error(`❌ Coverage (${statements}%) is below 90%`);
+            const avg = files.reduce((sum, f) => sum + f.statements.pct, 0) / files.length;
+            console.log(`✅ Test Coverage: \${avg.toFixed(2)}%`);
+            if (avg < 90) {
+              console.error(`❌ Coverage (\${avg.toFixed(2)}%) is below 90%`);
               process.exit(1);
             }
-          ')
+          ")

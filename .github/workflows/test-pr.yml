@@ -1,0 +1,56 @@
+name: Test PR on main
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests with coverage
+        run: npm run test:ci
+
+      - name: Check test coverage (minimum 90%)
+        run: |
+          FILE=""
+          if [ -f coverage/coverage-summary.json ]; then
+            FILE="coverage/coverage-summary.json"
+          elif [ -f coverage/coverage.json ]; then
+            FILE="coverage/coverage.json"
+          elif [ -f coverage/coverage-final.json ]; then
+            FILE="coverage/coverage-final.json"
+          else
+            echo "❌ No coverage summary file found in coverage/"
+            exit 1
+          fi
+
+          node -e "
+            const fs = require('fs');
+            const data = JSON.parse(fs.readFileSync('$FILE', 'utf8'));
+            const files = Object.values(data);
+            const covered = files.filter(f => typeof f.statements?.pct === 'number');
+            if (!covered.length) {
+              console.error('❌ No valid coverage data found in ' + '$FILE');
+              process.exit(1);
+            }
+            const avg = covered.reduce((sum, f) => sum + f.statements.pct, 0) / covered.length;
+            const percentage = avg.toFixed(2);
+            console.log(\`✅ Test Coverage: \${percentage}%\`);
+            if (avg < 90) {
+              console.error(\`❌ Coverage (\${percentage}%) is below 90%\`);
+              process.exit(1);
+            }
+          "

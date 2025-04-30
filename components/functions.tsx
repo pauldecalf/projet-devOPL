@@ -17,7 +17,8 @@ export function countObjects<T>(list: T[]): number {
 // Fonction 4 : mettre en majuscule chaque mot
 export function capitalizeWords(sentence: string): string {
   return sentence
-    .split(" ")
+    .trim() // supprime les espaces au début et à la fin
+    .split(/\s+/) // split sur un ou plusieurs espaces
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 }

@@ -15,6 +15,14 @@ describe("Fonctions de TestPage", () => {
     it("additionne deux zéros", () => {
       expect(addNumbers(0, 0)).toBe(0);
     });
+
+    it("additionne deux nombres négatifs", () => {
+      expect(addNumbers(-4, -6)).toBe(-10);
+    });
+
+    it("additionne un nombre à zéro", () => {
+      expect(addNumbers(7, 0)).toBe(7);
+    });
   });
 
   describe("isPalindrome", () => {
@@ -29,6 +37,22 @@ describe("Fonctions de TestPage", () => {
     it("ignore la casse et les caractères spéciaux", () => {
       expect(isPalindrome("A man, a plan, a canal: Panama")).toBe(true);
     });
+
+    it("détecte correctement un mot palindrome avec chiffres", () => {
+      expect(isPalindrome("12321")).toBe(true);
+    });
+
+    it("ignore les espaces et ponctuations", () => {
+      expect(isPalindrome("No 'x' in Nixon")).toBe(true);
+    });
+
+    it("retourne true pour une chaîne vide", () => {
+      expect(isPalindrome("")).toBe(true);
+    });
+
+    it("retourne true pour un caractère unique", () => {
+      expect(isPalindrome("a")).toBe(true);
+    });
   });
 
   describe("countObjects", () => {
@@ -38,6 +62,14 @@ describe("Fonctions de TestPage", () => {
 
     it("retourne 0 pour un tableau vide", () => {
       expect(countObjects([])).toBe(0);
+    });
+
+    it("compte correctement avec un seul objet", () => {
+      expect(countObjects([{ name: "test" }])).toBe(1);
+    });
+
+    it("compte correctement avec des objets de types différents", () => {
+      expect(countObjects([{ id: 1 }, { name: "a" }, { active: true }])).toBe(3);
     });
   });
 
@@ -52,6 +84,22 @@ describe("Fonctions de TestPage", () => {
 
     it("gère une chaîne vide", () => {
       expect(capitalizeWords("")).toBe("");
+    });
+
+    it("ignore les espaces supplémentaires entre les mots", () => {
+      expect(capitalizeWords("  hello   world ")).toBe("Hello World");
+    });
+
+    it("gère les mots composés", () => {
+      expect(capitalizeWords("bon-jovi est cool")).toBe("Bon-jovi Est Cool");
+    });
+
+    it("garde les chiffres intacts", () => {
+      expect(capitalizeWords("le 1er test est ok")).toBe("Le 1er Test Est Ok");
+    });
+
+    it("gère les caractères spéciaux", () => {
+      expect(capitalizeWords("l'été à l'hôtel")).toBe("L'été À L'hôtel");
     });
   });
 });

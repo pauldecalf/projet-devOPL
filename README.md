@@ -66,6 +66,3 @@ Password : admin
 Id : admin
 
 password : Tg8#plmWz9eD
-
-
-

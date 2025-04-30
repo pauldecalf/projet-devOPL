@@ -116,6 +116,8 @@ services:
       - "3001:3000"
     volumes:
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/provisioning:/etc/grafana/provisioning
       - grafana_data:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_USER=admin
@@ -123,6 +125,7 @@ services:
     restart: unless-stopped
     networks:
       - monitoring
+
 
 networks:
   monitoring:

@@ -58,12 +58,12 @@ npm run test
 
 
 
-## 5. Déploiement avec Docker
+## 5. Lancer le serveur Dockeur
 
-Lancer l'Application avec Docker Composer, il faut démarrer les conteneurs définis dans le fichier docker-compose.yaml avec la commande suivante :
+Pour lancer le serveur:
 
 ```bash
-docker-compose up -d
+docker compose up --build
 ```
 
 Pour retourner sur le README du projet : [`README du projet`](README.md)

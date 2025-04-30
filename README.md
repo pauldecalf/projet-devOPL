@@ -78,13 +78,7 @@ Pour en savoir plus, la documentation complète pour l'installation : [`Installa
 Pour lancer le serveur:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+docker compose up --build
 ```
 
 ### 3. Pour lancer les tests
@@ -124,18 +118,22 @@ Delete : ............ .... .......
 
 ## Accès aux outils
 
-### Grafana
+### App Next 
+
+Accès à l'app : http://localhost:3000/
+
+### 📊 Grafana
 
 Id : admin
-
 Password : admin
+Accès aux tableaux :🔗 http://localhost:3001/
 
+### SonarQube
 
-### SonarCube
-
-SonarCube
 Id : admin
 password : Tg8#plmWz9eD
+Accès aux données :🔗 http://localhost:9000/
+
 
 
 ## Architecture du projet 
@@ -143,6 +141,7 @@ password : Tg8#plmWz9eD
 Ce projet utilise du Next.js, il comporte plusieurs dossiers :
 
 - `/app` : contient les pages de l’application
+- `
 - `/components`: composants réutilisables
 - `/grafana`: contient la configuration de Grafana pour avoir une visualisation des données.
 - `/loki`: contient la configuration pour l'intégration de Loki, permettant la collecte et la gestion des logs. Les logs collectés sont envoyés à Grafana pour une visualisation centralisée.
@@ -160,7 +159,6 @@ Ce projet utilise du Next.js, il comporte plusieurs dossiers :
 
 
 ## Documentation du choix technique
-
 | **Outil/Technologie**           | **Rôle**                                                                                             |
 |---------------------------------|------------------------------------------------------------------------------------------------------|
 | **Next.js** 🖥️                  | Framework principal pour le développement d'applications React avec rendu côté serveur (SSR) et génération statique (SSG). |
@@ -168,17 +166,15 @@ Ce projet utilise du Next.js, il comporte plusieurs dossiers :
 | **Docker** 🐳                   | Outil pour créer, déployer et exécuter des applications dans des conteneurs, assurant l'isolation de l'environnement. |
 | **Docker Compose** 🔧           | Outil pour gérer plusieurs conteneurs Docker, permettant d'orchestrer les services comme Prometheus et Grafana. |
 | **Prometheus** 📊               | Outil de surveillance open-source pour collecter et analyser des métriques de performance en temps réel. |
-| **Grafana** 📈                  | Outil de visualisation de données collectées par Prometheus, permettant la création de dashboards. |
+| **Grafana** 📈                  | Outil de visualisation de données collectées par Prometheus, permettant la création de deux dashboards avec les différentes données. |
 | **Loki** 🔍                     | Système de gestion des logs pour stocker et indexer les logs d'application, facilitant leur recherche. |
 | **Promtail** 📦                 | Agent qui collecte et envoie les logs vers Loki pour leur traitement et visualisation.               |
 | **Vitest** ✅                   | Framework de test unitaire et d'intégration rapide et moderne pour JavaScript/TypeScript.              |
 | **TypeScript** 🅾️              | Sur-ensemble de JavaScript offrant un typage statique pour améliorer la robustesse et la maintenabilité du code. |
 | **SonarQube** 🦑                | Outil d'analyse de code pour détecter les bugs, vulnérabilités et mauvaises pratiques dans le code.     |
-
-| **SonarCloud** ☁️              | Accès à SonarCloud pour analyser le code dans le cloud.                   |
+| **SonarCloud** ☁️              | Accès à SonarCloud pour analyser le code dans le cloud.                                              |
 | **Vitest.config.ts** ⚙️        | Fichier de configuration des tests unitaires avec Vitest.                                           |
-| **tsconfig.js** ⚡             | Fichier de configuration TypeScript pour la compilation du projet.                                   |
-
+| **tsconfig.js** ⚡             | Fichier de configuration TypeScript pour la compilation du projet.                                   | 
 ## Schéma de l'architecture du projet 
 
 ![Schéma de l'architecure de la solution](./public/schema_projet.png)

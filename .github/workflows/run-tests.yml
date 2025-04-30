@@ -30,22 +30,21 @@ jobs:
 
       - name: Check test coverage minimum (90%)
         run: |
-          if [ ! -f coverage/coverage-final.json ]; then
-            echo "❌ coverage-final.json not found."
+          if [ ! -f coverage/coverage-summary.json ]; then
+            echo "❌ coverage-summary.json not found."
             exit 1
           fi
           COVERAGE=$(node -e '
             const fs = require("fs");
-            const data = JSON.parse(fs.readFileSync("coverage/coverage-final.json", "utf8"));
-            const files = Object.values(data).filter(f => f?.statements?.pct != null);
-            if (!files.length) {
-              console.error("❌ No coverage data found in coverage-final.json");
+            const data = JSON.parse(fs.readFileSync("coverage/coverage-summary.json", "utf8"));
+            const statements = data.total?.statements?.pct;
+            if (statements == null) {
+              console.error("❌ No statements coverage found.");
               process.exit(1);
             }
-            const avg = files.reduce((sum, f) => sum + f.statements.pct, 0) / files.length;
-            console.log(`✅ Test Coverage: ${avg.toFixed(2)}%`);
-            if (avg < 90) {
-              console.error(`❌ Coverage (${avg.toFixed(2)}%) is below 90%`);
+            console.log(`✅ Test Coverage: ${statements}%`);
+            if (statements < 90) {
+              console.error(`❌ Coverage (${statements}%) is below 90%`);
               process.exit(1);
             }
           ')

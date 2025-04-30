@@ -55,7 +55,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2
         with:
           args: >
-            -Dsonar.organization=LorisPlante
+            -Dsonar.organization=lorisplante
             -Dsonar.projectKey=LorisPlante_projet-devOPL
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

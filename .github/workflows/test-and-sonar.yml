@@ -56,6 +56,6 @@ jobs:
         with:
           args: >
             -Dsonar.organization=LorisPlante
-            -Dsonar.projectKey=projet-devOPL
+            -Dsonar.projectKey=LorisPlante_projet-devOPL
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -53,6 +53,10 @@ jobs:
             }
           '
 
+      - name: Fix paths in lcov.info for SonarCloud
+        run: |
+          sed -i 's|SF:|SF:./|g' coverage/lcov.info
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:

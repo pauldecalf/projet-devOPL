@@ -15,9 +15,4 @@ datasources:
     type: loki
     access: proxy
     url: http://loki:3100
-    editable: false
-    jsonData:
-      derivedFields:
-        - name: "traceID"
-          matcherRegex: "traceID=(\\w+)"
-          url: "http://tempo:3200/trace/${__value.raw}" 
+    editable: false 

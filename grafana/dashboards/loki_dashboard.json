@@ -2,15 +2,192 @@
     "title": "Loki Monitoring Dashboard",
     "uid": "loki-monitoring",
     "timezone": "browser",
-    "refresh": "30s",
+    "refresh": "1s",
     "time": {
-      "from": "now-6h",
+      "from": "now-5m",
       "to": "now"
     },
     "schemaVersion": 39,
     "version": 1,
-    "tags": ["loki", "Prometheus"],
+    "tags": ["loki", "Prometheus", "logs"],
     "panels": [
+      {
+        "title": "Logs en temps réel (NextJS)",
+        "type": "logs",
+        "datasource": "Loki",
+        "targets": [
+          {
+            "expr": "{job=\"docker\", tag=\"nextjs\"}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showTime": true,
+          "showLabels": true,
+          "showCommonLabels": true,
+          "wrapLogMessage": false,
+          "prettifyLogMessage": true,
+          "enableLogDetails": true,
+          "dedupStrategy": "none",
+          "sortOrder": "Descending"
+        },
+        "gridPos": {"x": 0, "y": 0, "w": 24, "h": 15}
+      },
+      {
+        "title": "Logs par niveau",
+        "type": "timeseries",
+        "datasource": "Loki",
+        "targets": [
+          {
+            "expr": "sum(count_over_time({job=\"docker\", tag=\"nextjs\"} |~ \"(?i)error\" [1m]))",
+            "refId": "A",
+            "legendFormat": "Erreurs"
+          },
+          {
+            "expr": "sum(count_over_time({job=\"docker\", tag=\"nextjs\"} |~ \"(?i)warn\" [1m]))",
+            "refId": "B",
+            "legendFormat": "Avertissements"
+          },
+          {
+            "expr": "sum(count_over_time({job=\"docker\", tag=\"nextjs\"} |~ \"(?i)info\" [1m]))",
+            "refId": "C",
+            "legendFormat": "Informations"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "Logs par minute",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 20,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "smooth",
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": true,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Erreurs"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Avertissements"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "orange",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Informations"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "blue",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "options": {
+          "legend": {
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "desc"
+          }
+        },
+        "gridPos": {"x": 0, "y": 15, "w": 24, "h": 8}
+      },
+      {
+        "title": "Logs en temps réel (Tous les conteneurs)",
+        "type": "logs",
+        "datasource": "Loki",
+        "targets": [
+          {
+            "expr": "{job=\"docker\"}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showTime": true,
+          "showLabels": true,
+          "showCommonLabels": true,
+          "wrapLogMessage": false,
+          "prettifyLogMessage": false,
+          "enableLogDetails": true,
+          "dedupStrategy": "none",
+          "sortOrder": "Descending"
+        },
+        "gridPos": {"x": 0, "y": 23, "w": 24, "h": 15}
+      },
       {
         "title": "GC CPU Time",
         "type": "timeseries",
@@ -27,7 +204,7 @@
           },
           "overrides": []
         },
-        "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8}
+        "gridPos": {"x": 0, "y": 38, "w": 12, "h": 8}
       },
       {
         "title": "Goroutines",
@@ -45,7 +222,7 @@
           },
           "overrides": []
         },
-        "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8}
+        "gridPos": {"x": 12, "y": 38, "w": 12, "h": 8}
       },
       {
         "title": "Heap Allocation",
@@ -63,7 +240,7 @@
           },
           "overrides": []
         },
-        "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8}
+        "gridPos": {"x": 0, "y": 46, "w": 12, "h": 8}
       },
       {
         "title": "Scrape Duration (Loki)",
@@ -81,43 +258,7 @@
           },
           "overrides": []
         },
-        "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8}
-      },
-      {
-        "title": "Target Up (Loki)",
-        "type": "timeseries",
-        "datasource": "Prometheus",
-        "targets": [
-          {
-            "expr": "up{job=\"loki\"}",
-            "refId": "A"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "short"
-          },
-          "overrides": []
-        },
-        "gridPos": {"x": 0, "y": 16, "w": 12, "h": 8}
-      },
-      {
-        "title": "Scraped Samples (Loki)",
-        "type": "timeseries",
-        "datasource": "Prometheus",
-        "targets": [
-          {
-            "expr": "rate(scrape_samples_scraped{job=\"loki\"}[1m])",
-            "refId": "A"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "short"
-          },
-          "overrides": []
-        },
-        "gridPos": {"x": 12, "y": 16, "w": 12, "h": 8}
+        "gridPos": {"x": 12, "y": 46, "w": 12, "h": 8}
       }
     ]
   }

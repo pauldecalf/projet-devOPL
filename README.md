@@ -129,12 +129,11 @@ Id : admin
 Password : admin
 
 
-### SonarCloud
+### SonarCube
 
-SonarCloud
-Id : ___
-
-Password : ___
+SonarCube
+Id : admin
+password : Tg8#plmWz9eD
 
 
 ## Architecture du projet 

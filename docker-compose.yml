@@ -36,6 +36,11 @@ services:
     restart: unless-stopped
     networks:
       - monitoring
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.loki.rule=Host(`loki.traefik.me`)"
+      - "traefik.http.routers.loki.entrypoints=web"
+      - "traefik.http.services.loki.loadbalancer.server.port=3100"
 
   promtail:
     image: grafana/promtail:latest

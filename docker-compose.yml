@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
 
   sonarqube:
@@ -95,10 +93,10 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.prometheus.rule=Host(`docker-devops-1omqvu-prometheus-168-231-87-2.traefik.me`)"
-      - "traefik.http.routers.prometheus.entrypoints=websecure"
-      - "traefik.http.routers.prometheus.tls.certresolver=myresolver"
-      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+      - "traefik.http.routers.nextjs.rule=Host(`docker-devops-1omqvu-nextjs-168-231-87-2.traefik.me`)"
+      - "traefik.http.routers.nextjs.entrypoints=websecure"
+      - "traefik.http.routers.nextjs.tls.certresolver=myresolver"
+      - "traefik.http.services.nextjs.loadbalancer.server.port=9090"
 
   node-exporter:
     image: prom/node-exporter:latest

@@ -13,7 +13,7 @@ services:
       - db
     restart: unless-stopped
     networks:
-      - monitoring
+      - overlay
 
   db:
     image: postgres:13
@@ -26,7 +26,7 @@ services:
       - sonarqube_db_data:/var/lib/postgresql/data
     restart: unless-stopped
     networks:
-      - monitoring
+      - overlay
 
   loki:
     image: grafana/loki:2.9.4
@@ -39,7 +39,7 @@ services:
       - loki_data:/loki
     restart: unless-stopped
     networks:
-      - monitoring
+      - overlay
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.loki.rule=Host(`loki.traefik.me`)"
@@ -60,7 +60,7 @@ services:
       - loki
     restart: unless-stopped
     networks:
-      - monitoring
+      - overlay
 
   nextjs:
     build:
@@ -80,7 +80,7 @@ services:
       - NEXT_TELEMETRY_DISABLED=1
     restart: unless-stopped
     networks:
-      - monitoring
+      - overlay
     labels:
       - "logging=promtail"
       - "logging_jobname=nextjs"
@@ -106,7 +106,7 @@ services:
       - '--web.console.templates=/usr/share/prometheus/consoles'
     restart: unless-stopped
     networks:
-      - monitoring
+      - overlay
 
   node-exporter:
     image: prom/node-exporter:latest
@@ -123,7 +123,7 @@ services:
       - "9100:9100"
     restart: unless-stopped
     networks:
-      - monitoring
+      - overlay
 
   grafana:
     image: grafana/grafana:latest
@@ -140,13 +140,13 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     restart: unless-stopped
     networks:
-      - monitoring
+      - overlay
 
 
 networks:
-  monitoring:
+  overlay:
     driver: bridge
-    name: monitoring
+    name: overlay
 
 volumes:
   prometheus_data:

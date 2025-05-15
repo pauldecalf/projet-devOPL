@@ -35,9 +35,6 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.loki.rule=Host(`docker-devops-1omqvu-loki-168-231-87-2.traefik.me`)"
-      - "traefik.http.routers.loki.entrypoints=websecure"
-      - "traefik.http.routers.loki.tls.certresolver=myresolver"
       - "traefik.http.services.loki.loadbalancer.server.port=3100"
 
   promtail:
@@ -103,9 +100,6 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nodeexporter.rule=Host(`docker-devops-1omqvu-nodeexporter-168-231-87-2.traefik.me`)"
-      - "traefik.http.routers.nodeexporter.entrypoints=websecure"
-      - "traefik.http.routers.nodeexporter.tls.certresolver=myresolver"
       - "traefik.http.services.nodeexporter.loadbalancer.server.port=9100"
 
   grafana:
@@ -122,9 +116,6 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`docker-devops-1omqvu-grafana-168-231-87-2.traefik.me`)"
-      - "traefik.http.routers.grafana.entrypoints=websecure"
-      - "traefik.http.routers.grafana.tls.certresolver=myresolver"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
 
 networks:

@@ -57,13 +57,13 @@ services:
       - overlay
 
   nextjs:
-    image: pauldecalf/nextjs-portfolio  # Remplace par ton image DockerHub
+    image: pauldecalf/nextjs-portfolio
     ports:
       - "3005:3000"
     environment:
       - NODE_ENV=production
       - HOST=0.0.0.0
-      - PORT=3000
+      - PORT=3000  # 👈 Important
       - NEXT_TELEMETRY_DISABLED=1
     networks:
       - overlay
@@ -76,6 +76,7 @@ services:
         tag: "nextjs"
         max-size: "10m"
         max-file: "3"
+
 
   prometheus:
     image: prom/prometheus:latest

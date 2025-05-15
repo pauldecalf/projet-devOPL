@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
 
   sonarqube:
@@ -12,7 +14,10 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.sonarqube.loadbalancer.server.port=9000"
+      - "traefik.http.routers.sonarqube.rule=Host(`sonarqube.pauldecalf.fr`)"
+      - "traefik.http.routers.sonarqube.entrypoints=websecure"
+      - "traefik.http.routers.sonarqube.tls.certresolver=myresolver"
+      - "traefik.http.services.sonarqube.loadbalancer.server.port=3001"
 
   db:
     image: postgres:13
@@ -35,7 +40,10 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.loki.loadbalancer.server.port=3100"
+      - "traefik.http.routers.loki.rule=Host(`loki.pauldecalf.fr`)"
+      - "traefik.http.routers.loki.entrypoints=websecure"
+      - "traefik.http.routers.loki.tls.certresolver=myresolver"
+      - "traefik.http.services.loki.loadbalancer.server.port=3002"
 
   promtail:
     image: grafana/promtail:latest
@@ -62,7 +70,10 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.nextjs.loadbalancer.server.port=3000"
+      - "traefik.http.routers.nextjs.rule=Host(`portfolio.pauldecalf.fr`)"
+      - "traefik.http.routers.nextjs.entrypoints=websecure"
+      - "traefik.http.routers.nextjs.tls.certresolver=myresolver"
+      - "traefik.http.services.nextjs.loadbalancer.server.port=3003"
     logging:
       driver: "json-file"
       options:
@@ -84,7 +95,10 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.nextjs.loadbalancer.server.port=9090"
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.pauldecalf.fr`)"
+      - "traefik.http.routers.prometheus.entrypoints=websecure"
+      - "traefik.http.routers.prometheus.tls.certresolver=myresolver"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=3004"
 
   node-exporter:
     image: prom/node-exporter:latest
@@ -100,7 +114,10 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.nodeexporter.loadbalancer.server.port=9100"
+      - "traefik.http.routers.nodeexporter.rule=Host(`node.pauldecalf.fr`)"
+      - "traefik.http.routers.nodeexporter.entrypoints=websecure"
+      - "traefik.http.routers.nodeexporter.tls.certresolver=myresolver"
+      - "traefik.http.services.nodeexporter.loadbalancer.server.port=3005"
 
   grafana:
     image: grafana/grafana:latest
@@ -116,7 +133,10 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.pauldecalf.fr`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls.certresolver=myresolver"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3006"
 
 networks:
   overlay:

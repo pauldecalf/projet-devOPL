@@ -4,24 +4,21 @@ import Image from "next/image";
 import { useEffect } from "react";
 
 function logMessages() {
-  console.log('Info log: Page chargée avec succès');
-  console.warn('Warning log: Performances potentiellement affectées');
-  console.error('Error log: Problème lors du chargement de certains composants');
+  console.log("Info log: Page chargée avec succès");
+  console.warn("Warning log: Performances potentiellement affectées");
+  console.error("Error log: Problème lors du chargement de certains composants");
 }
 
 export default function Home() {
-  // Utiliser useEffect pour les logs côté client
   useEffect(() => {
-    // Logs au chargement initial
     logMessages();
-    
-    // Logs périodiques plus fréquents
+
     const interval = setInterval(() => {
       const timestamp = new Date().toISOString();
       const random = Math.random();
-      
+
       console.log(`=========== LOGS NEXTJS ${timestamp} ===========`);
-      
+
       if (random < 0.6) {
         console.log(`NEXTJS INFO: Action utilisateur simulée à ${timestamp}`);
       } else if (random < 0.9) {
@@ -29,24 +26,22 @@ export default function Home() {
       } else {
         console.error(`NEXTJS ERROR: Erreur de connexion à ${timestamp}`);
       }
-      
-      // Ajouter quelques logs supplémentaires pour les tests
-      console.log(`NEXTJS INFO: Chargement de la page principale`);
-      console.log(`NEXTJS INFO: Utilisateur actif sur la page`);
-      
+
+      console.log("NEXTJS INFO: Chargement de la page principale");
+      console.log("NEXTJS INFO: Utilisateur actif sur la page");
+
       if (Math.random() > 0.7) {
         console.warn(`NEXTJS WARNING: Performance dégradée à ${timestamp}`);
       }
-      
+
       if (Math.random() > 0.9) {
         console.error(`NEXTJS ERROR: Échec de la requête API à ${timestamp}`);
       }
-    }, 1000); // Logs chaque seconde
-    
-    // Cleanup
+    }, 1000);
+
     return () => clearInterval(interval);
   }, []);
-  
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -58,19 +53,18 @@ export default function Home() {
           height={38}
           priority
         />
-<ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-  <li className="mb-2 tracking-[-.01em]">
-    Get started by editing&nbsp;
-    <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-      app/page.tsx
-    </code>
-    .
-  </li>
-  <li className="tracking-[-.01em]">
-    Save and see your changes instantly.
-  </li>
-</ol>
-
+        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
+          <li className="mb-2 tracking-[-.01em]">
+            Get started by editing&nbsp;
+            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
+              app/page.tsx
+            </code>
+            .
+          </li>
+          <li className="tracking-[-.01em]">
+            Save and see your changes instantly.
+          </li>
+        </ol>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <a

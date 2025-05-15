@@ -145,8 +145,8 @@ services:
 
 networks:
   overlay:
-    driver: bridge
-    name: overlay
+    driver: overlay
+    attachable: true
 
 volumes:
   prometheus_data:

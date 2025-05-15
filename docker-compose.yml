@@ -14,10 +14,9 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.sonarqube.rule=Host(`sonarqube.docker-devops-1omqvu-3aae49-168-231-87-2.traefik.me`)"
-      - "traefik.http.routers.sonarqube.entrypoints=websecure"
-      - "traefik.http.routers.sonarqube.tls.certresolver=myresolver"
-      - "traefik.http.services.sonarqube.loadbalancer.server.port=9000"
+      - "traefik.http.routers.sonarqube.rule=Host(`docker-devops-1omqvu-994fe1-168-231-87-2.traefik.me`)"
+      - "traefik.http.routers.sonarqube.entrypoints=web"
+      - "traefik.http.services.sonarqube.loadbalancer.server.port=3000"
 
   db:
     image: postgres:13
@@ -29,6 +28,11 @@ services:
       - sonarqube_db_data:/var/lib/postgresql/data
     networks:
       - overlay
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.db.rule=Host(`docker-devops-1omqvu-723c52-168-231-87-2.traefik.me`)"
+      - "traefik.http.routers.db.entrypoints=web"
+      - "traefik.http.services.db.loadbalancer.server.port=3000"
 
   loki:
     image: grafana/loki:2.9.4
@@ -40,10 +44,9 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.loki.rule=Host(`loki.docker-devops-1omqvu-3aae49-168-231-87-2.traefik.me`)"
-      - "traefik.http.routers.loki.entrypoints=websecure"
-      - "traefik.http.routers.loki.tls.certresolver=myresolver"
-      - "traefik.http.services.loki.loadbalancer.server.port=3100"
+      - "traefik.http.routers.loki.rule=Host(`docker-devops-1omqvu-97c4b1-168-231-87-2.traefik.me`)"
+      - "traefik.http.routers.loki.entrypoints=web"
+      - "traefik.http.services.loki.loadbalancer.server.port=3000"
 
   promtail:
     image: grafana/promtail:latest
@@ -58,6 +61,11 @@ services:
       - loki
     networks:
       - overlay
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.promtail.rule=Host(`docker-devops-1omqvu-03e0e2-168-231-87-2.traefik.me`)"
+      - "traefik.http.routers.promtail.entrypoints=web"
+      - "traefik.http.services.promtail.loadbalancer.server.port=3000"
 
   nextjs:
     image: 53872852/nextjs-portfolio
@@ -70,9 +78,8 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nextjs.rule=Host(`nextjs.docker-devops-1omqvu-3aae49-168-231-87-2.traefik.me`)"
-      - "traefik.http.routers.nextjs.entrypoints=websecure"
-      - "traefik.http.routers.nextjs.tls.certresolver=myresolver"
+      - "traefik.http.routers.nextjs.rule=Host(`docker-devops-1omqvu-4fc4c2-168-231-87-2.traefik.me`)"
+      - "traefik.http.routers.nextjs.entrypoints=web"
       - "traefik.http.services.nextjs.loadbalancer.server.port=3000"
 
   prometheus:
@@ -89,29 +96,9 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.prometheus.rule=Host(`prometheus.docker-devops-1omqvu-3aae49-168-231-87-2.traefik.me`)"
-      - "traefik.http.routers.prometheus.entrypoints=websecure"
-      - "traefik.http.routers.prometheus.tls.certresolver=myresolver"
-      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
-
-  node-exporter:
-    image: prom/node-exporter:latest
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-    networks:
-      - overlay
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.nodeexporter.rule=Host(`node.docker-devops-1omqvu-3aae49-168-231-87-2.traefik.me`)"
-      - "traefik.http.routers.nodeexporter.entrypoints=websecure"
-      - "traefik.http.routers.nodeexporter.tls.certresolver=myresolver"
-      - "traefik.http.services.nodeexporter.loadbalancer.server.port=9100"
+      - "traefik.http.routers.prometheus.rule=Host(`docker-devops-1omqvu-994fe1-168-231-87-2.traefik.me`)"
+      - "traefik.http.routers.prometheus.entrypoints=web"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=3000"
 
   grafana:
     image: grafana/grafana:latest
@@ -127,7 +114,7 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`grafana.docker-devops-1omqvu-3aae49-168-231-87-2.traefik.me`)"
+      - "traefik.http.routers.grafana.rule=Host(`docker-devops-1omqvu-3aae49-168-231-87-2.traefik.me`)"
       - "traefik.http.routers.grafana.entrypoints=websecure"
       - "traefik.http.routers.grafana.tls.certresolver=myresolver"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"

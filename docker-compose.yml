@@ -10,11 +10,12 @@ services:
       - db
     networks:
       - overlay
-    networks:
-      - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.nextjs.loadbalancer.server.port=9000"
+      - "traefik.http.routers.sonarqube.rule=Host(`docker-devops-1omqvu-1788f0-168-231-87-2.traefik.me`)"
+      - "traefik.http.routers.sonarqube.entrypoints=websecure"
+      - "traefik.http.routers.sonarqube.tls.certresolver=myresolver"
+      - "traefik.http.services.sonarqube.loadbalancer.server.port=9000"
 
   db:
     image: postgres:13

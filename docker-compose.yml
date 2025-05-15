@@ -10,6 +10,8 @@ services:
       - db
     networks:
       - overlay
+    networks:
+      - overlay
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.nextjs.loadbalancer.server.port=9000"
@@ -24,9 +26,6 @@ services:
       - sonarqube_db_data:/var/lib/postgresql/data
     networks:
       - overlay
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.nextjs.loadbalancer.server.port=3306"
 
   loki:
     image: grafana/loki:2.9.4
@@ -38,7 +37,10 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.nextjs.loadbalancer.server.port=3100"
+      - "traefik.http.routers.loki.rule=Host(`docker-devops-1omqvu-loki-168-231-87-2.traefik.me`)"
+      - "traefik.http.routers.loki.entrypoints=websecure"
+      - "traefik.http.routers.loki.tls.certresolver=myresolver"
+      - "traefik.http.services.loki.loadbalancer.server.port=3100"
 
   promtail:
     image: grafana/promtail:latest
@@ -53,9 +55,6 @@ services:
       - loki
     networks:
       - overlay
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.nextjs.loadbalancer.server.port=3005"
 
   nextjs:
     image: 53872852/nextjs-portfolio
@@ -106,7 +105,10 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.nextjs.loadbalancer.server.port=3000"
+      - "traefik.http.routers.nodeexporter.rule=Host(`docker-devops-1omqvu-nodeexporter-168-231-87-2.traefik.me`)"
+      - "traefik.http.routers.nodeexporter.entrypoints=websecure"
+      - "traefik.http.routers.nodeexporter.tls.certresolver=myresolver"
+      - "traefik.http.services.nodeexporter.loadbalancer.server.port=9100"
 
   grafana:
     image: grafana/grafana:latest

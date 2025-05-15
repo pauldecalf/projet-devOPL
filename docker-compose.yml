@@ -1,8 +1,9 @@
+version: "3.8"
+
 services:
 
   sonarqube:
     image: sonarqube:community
-    container_name: sonarqube
     ports:
       - "9000:9000"
     environment:
@@ -11,33 +12,28 @@ services:
       - SONAR_JDBC_PASSWORD=sonar
     depends_on:
       - db
-    restart: unless-stopped
     networks:
       - overlay
 
   db:
     image: postgres:13
-    container_name: sonarqube_db
     environment:
       - POSTGRES_USER=sonar
       - POSTGRES_PASSWORD=sonar
       - POSTGRES_DB=sonar
     volumes:
       - sonarqube_db_data:/var/lib/postgresql/data
-    restart: unless-stopped
     networks:
       - overlay
 
   loki:
     image: grafana/loki:2.9.4
-    container_name: loki
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/loki-config.yaml
     volumes:
       - ./loki/loki-config.yaml:/etc/loki/loki-config.yaml
       - loki_data:/loki
-    restart: unless-stopped
     networks:
       - overlay
     labels:
@@ -48,7 +44,6 @@ services:
 
   promtail:
     image: grafana/promtail:latest
-    container_name: promtail
     volumes:
       - ./promtail-config.yaml:/etc/promtail/config.yaml
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
@@ -58,27 +53,18 @@ services:
     command: -config.file=/etc/promtail/config.yaml
     depends_on:
       - loki
-    restart: unless-stopped
     networks:
       - overlay
 
   nextjs:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: nextjs
+    image: pauldecalf/nextjs-portfolio  # Remplace par ton image DockerHub
     ports:
       - "3005:3000"
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/.next
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - HOST=0.0.0.0
       - PORT=3000
       - NEXT_TELEMETRY_DISABLED=1
-    restart: unless-stopped
     networks:
       - overlay
     labels:
@@ -93,7 +79,6 @@ services:
 
   prometheus:
     image: prom/prometheus:latest
-    container_name: prometheus
     ports:
       - "9090:9090"
     volumes:
@@ -104,13 +89,11 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
-    restart: unless-stopped
     networks:
       - overlay
 
   node-exporter:
     image: prom/node-exporter:latest
-    container_name: node-exporter
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -121,13 +104,11 @@ services:
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     ports:
       - "9100:9100"
-    restart: unless-stopped
     networks:
       - overlay
 
   grafana:
     image: grafana/grafana:latest
-    container_name: grafana
     ports:
       - "3001:3000"
     volumes:
@@ -138,10 +119,8 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
-    restart: unless-stopped
     networks:
       - overlay
-
 
 networks:
   overlay:
@@ -153,4 +132,3 @@ volumes:
   grafana_data:
   loki_data:
   sonarqube_db_data:
-

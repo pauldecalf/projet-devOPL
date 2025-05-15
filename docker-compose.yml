@@ -4,8 +4,6 @@ services:
 
   sonarqube:
     image: sonarqube:community
-    ports:
-      - "9000:9000"
     environment:
       - SONAR_JDBC_URL=jdbc:postgresql://db:5432/sonar
       - SONAR_JDBC_USERNAME=sonar
@@ -14,6 +12,12 @@ services:
       - db
     networks:
       - overlay
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarqube.rule=Host(`sonar.tondomaine.com`)"
+      - "traefik.http.routers.sonarqube.entrypoints=websecure"
+      - "traefik.http.routers.sonarqube.tls.certresolver=myresolver"
+      - "traefik.http.services.sonarqube.loadbalancer.server.port=9000"
 
   db:
     image: postgres:13
@@ -28,8 +32,6 @@ services:
 
   loki:
     image: grafana/loki:2.9.4
-    ports:
-      - "3100:3100"
     command: -config.file=/etc/loki/loki-config.yaml
     volumes:
       - ./loki/loki-config.yaml:/etc/loki/loki-config.yaml
@@ -38,8 +40,9 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.loki.rule=Host(`loki.traefik.me`)"
-      - "traefik.http.routers.loki.entrypoints=web"
+      - "traefik.http.routers.loki.rule=Host(`loki.tondomaine.com`)"
+      - "traefik.http.routers.loki.entrypoints=websecure"
+      - "traefik.http.routers.loki.tls.certresolver=myresolver"
       - "traefik.http.services.loki.loadbalancer.server.port=3100"
 
   promtail:
@@ -58,8 +61,6 @@ services:
 
   nextjs:
     image: 53872852/nextjs-portfolio
-    ports:
-      - "3005:3000"
     environment:
       - NODE_ENV=production
       - HOST=0.0.0.0
@@ -69,8 +70,9 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nextjs.rule=Host(`docker-devops-1omqvu-c679e6-168-231-87-2.traefik.me`)"
-      - "traefik.http.routers.nextjs.entrypoints=web"
+      - "traefik.http.routers.nextjs.rule=Host(`portfolio.tondomaine.com`)"
+      - "traefik.http.routers.nextjs.entrypoints=websecure"
+      - "traefik.http.routers.nextjs.tls.certresolver=myresolver"
       - "traefik.http.services.nextjs.loadbalancer.server.port=3000"
     logging:
       driver: "json-file"
@@ -79,11 +81,8 @@ services:
         max-size: "10m"
         max-file: "3"
 
-
   prometheus:
     image: prom/prometheus:latest
-    ports:
-      - "9090:9090"
     volumes:
       - ./prometheus:/etc/prometheus
       - prometheus_data:/prometheus
@@ -94,6 +93,12 @@ services:
       - '--web.console.templates=/usr/share/prometheus/consoles'
     networks:
       - overlay
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.tondomaine.com`)"
+      - "traefik.http.routers.prometheus.entrypoints=websecure"
+      - "traefik.http.routers.prometheus.tls.certresolver=myresolver"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
 
   node-exporter:
     image: prom/node-exporter:latest
@@ -105,15 +110,17 @@ services:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-    ports:
-      - "9100:9100"
     networks:
       - overlay
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nodeexporter.rule=Host(`node.tondomaine.com`)"
+      - "traefik.http.routers.nodeexporter.entrypoints=websecure"
+      - "traefik.http.routers.nodeexporter.tls.certresolver=myresolver"
+      - "traefik.http.services.nodeexporter.loadbalancer.server.port=9100"
 
   grafana:
     image: grafana/grafana:latest
-    ports:
-      - "3001:3000"
     volumes:
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana/dashboards:/var/lib/grafana/dashboards
@@ -124,6 +131,12 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     networks:
       - overlay
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.tondomaine.com`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls.certresolver=myresolver"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
 
 networks:
   overlay:

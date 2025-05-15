@@ -58,6 +58,8 @@ services:
 
   nextjs:
     image: 53872852/nextjs-portfolio
+    ports:
+      - "3005:3000"
     environment:
       - NODE_ENV=production
       - HOST=0.0.0.0
@@ -67,7 +69,7 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nextjs.rule=Host(`docker-devops-1omqvu-b93ff4-168-231-87-2.traefik.me`)"
+      - "traefik.http.routers.nextjs.rule=Host(`docker-devops-1omqvu-c679e6-168-231-87-2.traefik.me`)"
       - "traefik.http.routers.nextjs.entrypoints=web"
       - "traefik.http.services.nextjs.loadbalancer.server.port=3000"
     logging:

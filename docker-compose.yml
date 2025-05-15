@@ -12,6 +12,8 @@ services:
     depends_on:
       - db
     restart: unless-stopped
+    networks:
+      - monitoring
 
   db:
     image: postgres:13
@@ -23,6 +25,8 @@ services:
     volumes:
       - sonarqube_db_data:/var/lib/postgresql/data
     restart: unless-stopped
+    networks:
+      - monitoring
 
   loki:
     image: grafana/loki:2.9.4

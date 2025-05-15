@@ -17,7 +17,8 @@ services:
       - "traefik.http.routers.sonarqube.rule=Host(`docker-devops-1omqvu-3aae49-168-231-87-2.traefik.me`)"
       - "traefik.http.routers.sonarqube.entrypoints=websecure"
       - "traefik.http.routers.sonarqube.tls.certresolver=myresolver"
-      - "traefik.http.services.sonarqube.loadbalancer.server.port=3001"
+      - "traefik.http.services.sonarqube.loadbalancer.server.port=9000"
+
 
   db:
     image: postgres:13

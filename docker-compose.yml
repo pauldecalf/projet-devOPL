@@ -14,7 +14,7 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.sonarqube.rule=Host(`https://docker-devops-1omqvu-994fe1-168-231-87-2.traefik.me/`)"
+      - "traefik.http.routers.sonarqube.rule=Host(`docker-devops-1omqvu-994fe1-168-231-87-2.traefik.me`)"
       - "traefik.http.routers.sonarqube.entrypoints=websecure"
       - "traefik.http.routers.sonarqube.tls.certresolver=myresolver"
       - "traefik.http.services.sonarqube.loadbalancer.server.port=9000"
@@ -40,7 +40,7 @@ services:
       - overlay
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.loki.rule=Host(`loki.docker-devops-1omqvu-3aae49-168-231-87-2.traefik.me`)"
+      - "traefik.http.routers.loki.rule=Host(`docker-devops-1omqvu-97c4b1-168-231-87-2.traefik.me`)"
       - "traefik.http.routers.loki.entrypoints=websecure"
       - "traefik.http.routers.loki.tls.certresolver=myresolver"
       - "traefik.http.services.loki.loadbalancer.server.port=3100"

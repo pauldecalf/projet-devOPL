@@ -10,12 +10,7 @@ RUN npm install
 COPY . .
 
 # Exposition du port
-EXPOSE 3000
-
-# Variables d'environnement
-ENV NODE_ENV=development
-ENV HOST=0.0.0.0
-ENV PORT=3000
+EXPOSE 3001
 
 # Commande de démarrage
 CMD ["npm", "run", "dev"]

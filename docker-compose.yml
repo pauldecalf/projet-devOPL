@@ -59,19 +59,14 @@ services:
 
   nextjs:
     image: 53872852/nextjs-portfolio
+    expose:
+      - 3001
+    ports:
+      - "3001:3001"
     environment:
-      - NODE_ENV=production
-      - HOST=0.0.0.0
-      - PORT=3001
       - NEXT_TELEMETRY_DISABLED=1
     networks:
       - app-net
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.nextjs.rule=Host(`nextjs.docker-devops-1omqvu-3aae49-168-231-87-2.traefik.me`)"
-      - "traefik.http.routers.nextjs.entrypoints=websecure"
-      - "traefik.http.routers.nextjs.tls.certresolver=myresolver"
-      - "traefik.http.services.nextjs.loadbalancer.server.port=3001"
 
   prometheus:
     image: prom/prometheus:latest

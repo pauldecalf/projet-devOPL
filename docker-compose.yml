@@ -58,7 +58,7 @@ services:
       - app-net
 
   nextjs:
-    image: 53872852/nextjs-portfolio
+    image: node:18-alpine
     expose:
       - 3001
     ports:
